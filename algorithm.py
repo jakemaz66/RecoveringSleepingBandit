@@ -1,4 +1,4 @@
-import datareader
+import parquet_reader
 import numpy as np
 import pandas as pd
 import math
@@ -6,10 +6,10 @@ import ast
 from collections import deque
 import deque
 
-def alg():
+def alg(train_df):
     """This function returns the scores for each arm template"""
 
-    df = datareader.DataReader('data/train1.snappy.parquet', 500, 30000).read()
+    df = train_df
 
     #Defining dictionaries and deque with max values for historical arms
     arm_selected_dict = {}
@@ -102,7 +102,7 @@ def alg():
     return arm_score, unique_arms   
 
 
-def newpolicy_score(test_df):
+def newpolicy_score(test_df, train_df):
     """This function returns the difference between the new policy and the old"""
 
     df = test_df
@@ -111,7 +111,7 @@ def newpolicy_score(test_df):
     t = len(df)
 
     #Retrieving arm scores from training data
-    arm_score, unique = alg()
+    arm_score, unique = alg(train_df)
     filtered_dict = {key: value for key, value in arm_score.items() if value != 0}
 
     #Assigning each arm an equal random chance to be chosen, the old policy
@@ -155,4 +155,5 @@ def newpolicy_score(test_df):
     return rel_diff
 
 if __name__ == '__main__':
-    newpolicy_score(datareader.DataReader('data/test1.snappy.parquet', 500, 10000).read())
+    newpolicy_score(parquet_reader.DataReader('data/test1.snappy.parquet', 500, 10000).read(),
+                    parquet_reader.DataReader('data/train1.snappy.parquet', 500, 30000).read())
