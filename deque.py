@@ -7,6 +7,7 @@ class LimitedDict:
         self.dict = {}
 
     def add_value(self, key, value):
+        """This function adds a value to the dict, but pops the oldest element when exceeding max_value"""
         if len(self.get_values(key)) > self.max_values:
             self.dict[key].pop(0)
             self.dict[key].append(value)

@@ -2,7 +2,6 @@ import parquet_reader
 import numpy as np
 import pandas as pd
 import math
-import ast
 from collections import deque
 import deque
 

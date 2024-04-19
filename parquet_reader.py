@@ -1,7 +1,4 @@
 import pandas as pd
-import tarfile
-import io
-import pyarrow
 from fastparquet import ParquetFile
 import pyarrow.parquet as pq
 
@@ -17,6 +14,7 @@ class DataReader:
 
 
     def read(self):
+        """This function converts parquet rows into a pandas dataframe in batches"""
         counter = 0
         for i in self.parquet_file.iter_batches(batch_size=self.chunk_size):
             i = i.to_pandas()
@@ -25,6 +23,7 @@ class DataReader:
 
             if counter > self.max_elms:
                 break
+        #Changing the completion column to 0 or 1 for reward function
         mapper = {True: 1, False: 0}
         self.df['session_end_completed'] = self.df['session_end_completed'].map(mapper)
         

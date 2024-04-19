@@ -4,6 +4,7 @@ import os
 import pandas as pd
 
 def get_first_parquet_from_path(path):
+    """This function returns the first parquet file in a directory"""
     for (dir_path, _, files) in os.walk(path):
         for f in files:
             if f.endswith(".parquet"):
@@ -11,6 +12,7 @@ def get_first_parquet_from_path(path):
                 return first_pq_path
         
 def discover_df():
+    """This function quickly returns statistics about a parquet file"""
     parquet_file = pq.ParquetFile(first_pq)
     ts=parquet_file.metadata.row_group(0)
 
