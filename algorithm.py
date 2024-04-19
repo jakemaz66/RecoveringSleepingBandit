@@ -7,7 +7,6 @@ import deque
 
 def alg(train_df):
     """This function returns the scores for each arm template"""
-
     df = train_df
 
     #Defining dictionaries and deque with max values for historical arms
@@ -20,25 +19,21 @@ def alg(train_df):
     #Get unique arms from the concatenated array
     unique_arms = []
     for i in df['selected_template'].unique():
-        for j in i:
-            if j.isalnum():
-                unique_arms.append(j)
-    unique_arms = list(set(unique_arms))
+        unique_arms.append(i)
 
-    #Initializing all arm scores as equal (0) to begin
-    for i in unique_arms:
+        #Initializing all arm scores as equal (0) to begin
         arm_score[i] = 0
         arm_eligible_dict.add_key(i)
         arm_selected_dict[i] = []
 
-        subset = df.iloc[: :]
+    subset = df.iloc[:2000, :]
 
     #Iterating through each unique round [t], which is same as each row in dataframe
     for index, row in subset.iterrows():
         print(index)
 
         #Selecting arm 
-        arm =   row['selected_template']
+        arm = row['selected_template']
         
         #Store row index for selected arm
         arm_selected_dict[arm].append(index)
@@ -52,9 +47,9 @@ def alg(train_df):
         selected = len((rows_with_arm[rows_with_arm['session_end_completed'] == 1]))
         total = len(rows_with_arm)
 
-        if selected == 0:
+        if (selected == 0):
             selected = 0.0001
-        if total == 0:
+        if (total == 0):
             total = 0.0001
 
         mu_plus = selected / total
@@ -75,9 +70,9 @@ def alg(train_df):
         mu_minus = selected_minus / total_minus
 
         #Handling divide by 0 cases
-        if mu_plus == 0:
+        if (mu_plus == 0):
             mu_plus = 0.0001
-        if (mu_minus == 0) or (pd.isna(mu_minus)):
+        if (mu_minus == 0):
             mu_minus = 0.0001
 
         #Relative difference calculation to get the arm score
