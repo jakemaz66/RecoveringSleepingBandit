@@ -26,7 +26,7 @@ def alg(train_df):
         arm_eligible_dict.add_key(i)
         arm_selected_dict[i] = []
 
-    subset = df.iloc[:4962, :]
+    subset = df.iloc[:5000, :]
 
     #Iterating through each unique round [t], which is same as each row in dataframe
     for index, row in subset.iterrows():
@@ -61,11 +61,12 @@ def alg(train_df):
 
         mu_plus = selected / total
 
+        #C
         not_selected_indices = list(set(rows_with_eligible.index) - set(rows_with_arm.index))
         rows_eligible_not_selected = df.loc[not_selected_indices]
 
         selected_minus = len((rows_eligible_not_selected[rows_eligible_not_selected['session_end_completed'] == 1]))
-        (1-arm_score[arm])**-1 * selected_minus
+        selected_minus = (1-arm_score[arm])**-1 * selected_minus
 
         total_minus = len(rows_eligible_not_selected)
 
@@ -122,12 +123,15 @@ def newpolicy_score(test_df, train_df):
     #Defining selection probabilities
     soft_max_prob = {}
 
-    # Computing softmax of arm scores [π (a|t)]
+    # Computing softmax of arm scores [π (a|t)], add an explore hyperparameter to divide by
+    explore=1.1
     for eligible in filtered_dict.keys():
-        soft_max_prob[eligible] = math.exp(filtered_dict[eligible])
+        soft_max_prob[eligible] = math.exp(filtered_dict[eligible]/explore)
 
     #Calculating new policy
-    sum_probs = sum(soft_max_prob.values())
+    divided_values = [value / explore for value in soft_max_prob.values()]
+    sum_probs = sum(divided_values)
+
     new_policies = {arm: soft_max_prob[arm] / sum_probs for arm in soft_max_prob}
     
     #Getting differences in policy weights for each arm
@@ -156,5 +160,5 @@ def newpolicy_score(test_df, train_df):
     return rel_diff
 
 if __name__ == '__main__':
-    newpolicy_score(parquet_reader.DataReader('data/test1.snappy.parquet', 500, 100000).read(),
+    newpolicy_score(parquet_reader.DataReader('data/test1.snappy.parquet', 500, 5000).read(),
                     parquet_reader.DataReader('data/train1.snappy.parquet', 500, 100000).read())
