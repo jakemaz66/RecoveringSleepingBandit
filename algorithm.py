@@ -11,7 +11,7 @@ def alg(train_df):
 
     #Defining dictionaries and deque with max values for historical arms
     arm_selected_dict = {}
-    arm_eligible_dict = deque.LimitedDict(max_values=1500)
+    arm_eligible_dict = deque.LimitedDict(max_values=4000)
 
     #Stores each arm's score
     arm_score = {}
@@ -26,7 +26,7 @@ def alg(train_df):
         arm_eligible_dict.add_key(i)
         arm_selected_dict[i] = []
 
-    subset = df.iloc[:, :]
+    subset = df.iloc[:4962, :]
 
     #Iterating through each unique round [t], which is same as each row in dataframe
     for index, row in subset.iterrows():
@@ -45,7 +45,14 @@ def alg(train_df):
         #Get all previous rows where arm selected and apply reward function to calculate mu plus
         rows_with_arm = df.loc[arm_selected_dict[arm]]
         selected = len((rows_with_arm[rows_with_arm['session_end_completed'] == 1]))
-        total = len(rows_with_arm)
+        #Multiplying arm score by reward function
+        selected = selected * arm_score[arm]
+
+        #Get all previous rows where arm eligible but not selected and apply reward function to get mu minus
+        rows_with_eligible = df.loc[arm_eligible_dict.get_values(arm)]
+
+        #Rows where eligible
+        total = len(rows_with_eligible)
 
         if (selected == 0):
             selected = 0.0001
@@ -54,12 +61,12 @@ def alg(train_df):
 
         mu_plus = selected / total
 
-        #Get all previous rows where arm eligible but not selected and apply reward function to get mu minus
-        rows_with_eligible = df.loc[arm_eligible_dict.get_values(arm)]
         not_selected_indices = list(set(rows_with_eligible.index) - set(rows_with_arm.index))
         rows_eligible_not_selected = df.loc[not_selected_indices]
 
         selected_minus = len((rows_eligible_not_selected[rows_eligible_not_selected['session_end_completed'] == 1]))
+        (1-arm_score[arm])**-1 * selected_minus
+
         total_minus = len(rows_eligible_not_selected)
 
         if selected_minus == 0:
