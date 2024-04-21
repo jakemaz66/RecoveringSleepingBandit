@@ -28,3 +28,6 @@ class LimitedDict:
 
     def get_values(self, key):
         return list(self.dict.get(key, []))
+    
+    def get_keys(self):
+        return list(self.dict.keys())
