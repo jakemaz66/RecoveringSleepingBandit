@@ -1,8 +1,6 @@
-<<<<<<< HEAD
+
 # RecoveringSleepingBandit
 
-This repository replicates the mulit-armed bandit 
-=======
 # Duolingo Multi-Armed Bandit Optimization Algorithm
 
 This repository replicates the multi-armed bandit optimization algorithm implemented by Duolingo researchers Kevin P. Yancey and Burr Settles in their paper "A Sleeping, Recovering Bandit Algorithm for Optimizing Recurring Notifications". The algorithm uses historical choices of notifications meant to engage the user to use Duolingo to inform the best notification to send to the user at any time. Success is measured by the user completing their lesson within 2 hours of receiving the notification. The algorithm introduces novel concepts like applying a recency penalty to notifications sent recently due to the novelty effect (users becoming desensitized to the same frequent notification). The algorithm implemented here resulted in a 1.52% increase in average reward compared to the baseline policy of choosing a notification at random. This project was built in Python, utilizes a `parquet_reader` to convert Parquet data into a Pandas DataFrame, implements a custom deque data structure to control historical rounds, and implements the proposed algorithm on open-sourced data from Duolingo.
