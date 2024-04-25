@@ -4,10 +4,6 @@ import pandas as pd
 import math
 from collections import deque
 import deque
-#Onehot encode eligible
-#np.cumsum()
-#solve with pyspark 
-
 
 def alg2(train_df):
     """This function returns the scores for each arm template"""
@@ -82,11 +78,13 @@ def alg2(train_df):
         arm_score[i] = score
  
     return arm_score, unique_arms 
+
+
 #Arm scores after 500,000 rows 
 #{'B': -0.047331391145729304, 'A': 0.006045519325268447, 'J': -0.01694617539841133, 'L': -0.04136915628296414, 'F': -0.04549318729108681, 'E': -0.05108588091778463, 'G': -0.023230439457632902, 'H': -0.05199452534002813, 'D': -0.04358103756884987, 'C': -0.5859359258512996, 'K': -0.038284107850491876}
 
 
-def eval(test_df, train_df):
+def eval(test_df):
     df = test_df
     #Number of rounds in test dataset
     t = len(df)
@@ -113,15 +111,12 @@ def eval(test_df, train_df):
         #Getting days since arm a last chosen from history column to retrieve d (days) for recency penalty
         #If arm is selcted recently, you want it to be lower prob in the softmax calculation -> always hurts new policy score find better implementation
         for i in row['history'][::-1]:
-            if i['template'] == arm:
-                days = i['n_days']
-                break
-            else:
-                #If arm not in history, set default days to 34
-                days = 34
-                
-        #Adding decay function to score for recency effect, if this arm was recently chosen we want to lower it's prob for the round
-        decay_arm_score[arm] = arm_score[arm] #- (0.017*0.5)**(days/15)
+                if i['template'] == 'I':
+                    break
+                else:
+                    days = i['n_days']
+                    #Adding decay function to score for recency effect, if this arm was recently chosen we want to lower it's prob for the round
+                    decay_arm_score[i['template']] = arm_score[i['template']] - (0.017*0.5)**(days/15)
 
         # Computing softmax of arm scores [π (a|t)]
         new_policies = {}
@@ -166,5 +161,4 @@ def eval(test_df, train_df):
 
 
 if __name__ == '__main__':
-    eval(parquet_reader.DataReader('data/test1.snappy.parquet', 500, 500000).read(),
-                    parquet_reader.DataReader('data/train1.snappy.parquet', 500, 500000).read())
+    eval(parquet_reader.DataReader('data/test1.snappy.parquet', 5000, 100000).read())
