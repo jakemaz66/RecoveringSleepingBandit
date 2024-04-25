@@ -1,11 +1,11 @@
 """This is an alternative evaluation method that uses softmax to select arms"""
 
-import parquet_reader
+from data_loading import parquet_reader
 import numpy as np
 import pandas as pd
 import math
 from collections import deque
-import deque
+import data_loading.deque as deque
 
 def eval(test_df):
     df = test_df

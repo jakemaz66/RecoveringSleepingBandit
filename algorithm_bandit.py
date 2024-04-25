@@ -1,9 +1,9 @@
-import parquet_reader
+from data_loading import parquet_reader
 import numpy as np
 import pandas as pd
 import math
 from collections import deque
-import deque
+import data_loading.deque as deque
 from sklearn.preprocessing import MultiLabelBinarizer
 
 def alg2(train_df):
@@ -88,7 +88,7 @@ def alg2(train_df):
 
 def eval(test_df):
     """This function evaluates the algorithm using argmax as a selection policy"""
-    
+
     df = test_df
                           
     #Number of rounds in test dataset

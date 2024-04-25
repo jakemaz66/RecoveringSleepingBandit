@@ -1,9 +1,9 @@
-import parquet_reader
+from data_loading import parquet_reader
 import numpy as np
 import pandas as pd
 import math
 from collections import deque
-import deque
+import data_loading.deque as deque
 
 def alg2(train_df):
     """This function returns the scores for each arm template, using the language +
