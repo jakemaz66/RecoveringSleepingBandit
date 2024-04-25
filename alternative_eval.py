@@ -1,4 +1,4 @@
-"""This is an alternative evaluation method that uses softmax"""
+"""This is an alternative evaluation method that uses softmax to select arms"""
 
 import parquet_reader
 import numpy as np

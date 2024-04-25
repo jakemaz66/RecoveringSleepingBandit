@@ -6,7 +6,9 @@ from collections import deque
 import deque
 
 def alg2(train_df):
-    """This function returns the scores for each arm template"""
+    """This function returns the scores for each arm template, using the language +
+        each notification to create more unique arms
+    """
     from sklearn.preprocessing import MultiLabelBinarizer
     #Setting data fram equal to passed arg
     df = train_df

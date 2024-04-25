@@ -87,6 +87,8 @@ def alg2(train_df):
 
 
 def eval(test_df):
+    """This function evaluates the algorithm using argmax as a selection policy"""
+    
     df = test_df
                           
     #Number of rounds in test dataset
