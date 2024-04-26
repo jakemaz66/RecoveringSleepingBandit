@@ -35,7 +35,7 @@ class Visuals():
         table = PrettyTable(['Bandit Policy', 'Original Policy'])
 
         table.add_row([self.bandit_reward, self.original_reward])
-        table.add_row([str(self.testing_rounds) + "Rounds", str(self.testing_rounds) + "Rounds"])
+        table.add_row([str(self.testing_rounds) + " Rounds", str(self.testing_rounds) + " Rounds"])
         table.add_row(["Diverse Arm Scores", "Equal Arm Scores"])
 
         print(table)
