@@ -171,3 +171,5 @@ def eval(test_df):
 if __name__ == '__main__':
     eval(parquet_reader.DataReader('data/test1.snappy.parquet', 5000, 500000).read())
     #alg2(parquet_reader.DataReader('data/train1.snappy.parquet', 5000, 50000).read())
+
+    
