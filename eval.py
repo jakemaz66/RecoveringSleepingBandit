@@ -34,9 +34,9 @@ class Visuals():
 
         table = PrettyTable(['Bandit Policy', 'Original Policy'])
 
-        PrettyTable.add_row([self.bandit_reward, self.original_reward])
-        PrettyTable.add_row([self.testing_rounds, self.testing_rounds])
-        PrettyTable.add_row(["Diverse Arm Scores", "Equal Arm Scores"])
+        table.add_row([self.bandit_reward, self.original_reward])
+        table.add_row([str(self.testing_rounds) + "Rounds", str(self.testing_rounds) + "Rounds"])
+        table.add_row(["Diverse Arm Scores", "Equal Arm Scores"])
 
         print(table)
 
@@ -45,3 +45,4 @@ class Visuals():
 if __name__ == '__main__':
     viz = Visuals(bandit_reward=0.08233069306930693, original_reward=0.08099801980198021, testing_rounds=5000000)
     viz.bar_comparision()
+    viz.table()
